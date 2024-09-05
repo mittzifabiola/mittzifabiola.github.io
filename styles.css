@@ -1,0 +1,94 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f9ffcd; /* Color de fondo más claro para un look limpio */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    transition: background-color 0.3s ease; /* Suaviza la transición de fondo si se cambia */
+}
+
+.container {
+    text-align: center;
+    background: white;
+    border-radius: 15px; /* Bordes más redondeados */
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1); /* Sombra más pronunciada para un efecto más flotante */
+    padding: 30px;
+    width: 350px; /* Un poco más ancho para mayor comodidad */
+    transition: box-shadow 0.3s ease; /* Suaviza el cambio de sombra si se interactúa */
+}
+
+.container:hover {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2); /* Efecto hover que mejora el aspecto visual */
+}
+
+h1 {
+    color: #c8cd2c;
+    font-size: 1.8rem; /* Un poco más grande que el original */
+    margin-bottom: 25px;
+    font-weight: bold; /* Da más énfasis al título */
+}
+
+#Ktms {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 12px; /* Un poco más alto para mayor comodidad visual */
+    background: #e0e0e0;
+    border-radius: 6px;
+    outline: none;
+    margin-bottom: 25px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#Ktms:hover {
+    background: #ccc; /* Cambia de color cuando se pasa el mouse por encima */
+}
+
+#Ktms::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px; /* Un control un poco más grande */
+    height: 25px;
+    background: #20c80f; /* Color azul predeterminado */
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Sombra sutil para el control */
+    transition: background 0.3s ease, transform 0.2s ease; /* Suaviza el cambio de color y tamaño al hacer clic */
+}
+
+#Ktms::-webkit-slider-thumb:hover {
+    background: #0056b3; /* Color más oscuro cuando se pasa el mouse por encima */
+}
+
+#Ktms::-webkit-slider-thumb:active {
+    transform: scale(1.1); /* Agranda el control cuando se hace clic */
+}
+
+#Ktms::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #007bff;
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+#Kvaluetms {
+    display: block;
+    font-size: 20px; /* Tamaño de fuente más grande */
+    color: #333;
+    margin-bottom: 25px;
+    font-weight: 600; /* Hace que el valor se vea más prominente */
+}
+
+#TM {
+    font-size: 28px; /* Más grande para hacer que la fórmula matemática destaque más */
+    color: #399639; /* Azul para hacer juego con los otros elementos */
+    font-weight: bold; /* Da mayor énfasis a la fórmula */
+}
+
