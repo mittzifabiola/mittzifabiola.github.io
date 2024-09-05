@@ -1,0 +1,159 @@
+<head>
+    <!-- Metadatos básicos del documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Particle Control</title>
+  
+  <h4>Dezlice el slider para cambiar el TMS</h4>
+    
+    <!-- Enlace a un archivo CSS externo para el diseño de la página -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Scripts y estilos externos necesarios para el proyecto -->
+    <!-- FontAwesome: Para agregar íconos a la interfaz -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    
+    <!-- Particle.js: API que permite interactuar con el dispositivo Particle -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/particle-api-js@8/dist/particle.min.js"></script>
+    
+    <!-- jQuery: Librería de JavaScript para facilitar la manipulación del DOM -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    
+    <!-- D3.js: Librería para visualizaciones de datos (puede ser utilizada más adelante) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.9.0/d3.min.js"></script>
+    
+    <!-- Polyfill: Para asegurarse de que el código sea compatible con navegadores más antiguos -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    
+    <!-- MathJax: Permite mostrar ecuaciones matemáticas en el HTML -->
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+    <style>
+        /* Estilos para el slider personalizado */
+        .custom-slider {
+            -webkit-appearance: none; /* Elimina el estilo predeterminado de los navegadores */
+            width: 100%; /* Hace que ocupe todo el ancho disponible */
+            height: 15px;
+            border-radius: 5px; /* Bordes redondeados */
+            background: #ddd; /* Color del fondo del control deslizante */
+            outline: none; /* Elimina el borde azul cuando se hace clic */
+            opacity: 0.7; /* Transparencia del fondo */
+            transition: opacity 0.3s; /* Transición suave al interactuar */
+        }
+
+        .custom-slider:hover {
+            opacity: 1; /* Opacidad completa cuando el ratón pasa sobre el slider */
+        }
+
+        .custom-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 25px; /* Tamaño del control (el círculo) */
+            height: 25px;
+            border-radius: 50%; /* Círculo perfecto */
+            background: #4CAF50; /* Color del círculo */
+            cursor: pointer; /* Cambia el cursor a una mano */
+            transition: background 0.3s; /* Transición suave del color del control */
+        }
+
+        .custom-slider::-webkit-slider-thumb:hover {
+            background: #3e8e41; /* Cambia de color cuando se pasa el ratón por encima */
+        }
+
+        .custom-slider::-moz-range-thumb {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            background: #4CAF50;
+            cursor: pointer;
+        }
+
+        /* Estilos para el contenedor */
+        .container {
+            width: 50%;
+            margin: auto;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+        }
+
+        output {
+            display: block;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Contenedor principal de la interfaz -->
+    <div class="container">
+        <!-- Título de la página -->
+        <h1>Control</h1>
+        
+        <!-- Control deslizante (slider) con la clase custom-slider para aplicar el estilo -->
+        <input type="range" min="5" max="20" step="1" value="5" id="Ktms" class="custom-slider">
+        
+        <!-- Muestra el valor actual del slider -->
+        <output for="Ktms" id="Kvaluetms">5</output>
+        
+        <!-- Contenedor donde se mostrará la expresión matemática con el valor de TMS -->
+        <span id="TM">\[{TMS}\]</span>
+    </div>
+
+    <!-- Script de JavaScript para manejar la interacción con el dispositivo Particle -->
+    <script>
+        // Inicializa la API de Particle
+        var particle = new Particle();
+        var token; // Variable que almacenará el token de autenticación
+
+        // Llama al servicio de autenticación de Particle para obtener un token
+        particle.login({
+            username: 'mrdonjuan@ucol.mx', // Tu nombre de usuario (email) de Particle
+            password: 'mfRR1003'           // Tu contraseña de Particle
+        }).then(
+            function(data) {
+                // Si el inicio de sesión es exitoso, almacena el token de acceso
+                token = data.body.access_token;
+                console.log('Login successful, token:', token); // Muestra el token en la consola del navegador
+            },
+            function(err) {
+                // Si falla, muestra un mensaje de error en la consola
+                console.log('Could not log in.', err);
+            }
+        );
+
+        // Evento que escucha cambios en el valor del slider
+        document.getElementById('Ktms').addEventListener('input', function() {
+            // Captura el valor actual del slider
+            var output = document.getElementById('Kvaluetms');
+            output.innerHTML = this.value; // Actualiza el valor mostrado junto al slider
+            var Salida = this.value; // Asigna el valor del slider a la variable 'Salida'
+
+            // Verifica si el token está disponible antes de realizar la llamada a la función
+            if (token) {
+                // Llama a la función en el dispositivo Particle para pasarle el valor del slider
+                particle.callFunction({
+                    deviceId: '3a0025000947313037363132', // ID del dispositivo Particle
+                    name: 'TMS_2', // Nombre de la función a ejecutar en el dispositivo Particle
+                    argument: Salida, // El valor del slider se pasa como argumento
+                    auth: token // Autenticación mediante el token obtenido previamente
+                }).then(
+                    function(data) {
+                        // Si la llamada fue exitosa, muestra un mensaje en la consola
+                        console.log('Function call successful:', data);
+                    },
+                    function(err) {
+                        // Si la llamada falla, muestra un mensaje de error en la consola
+                        console.log('Function call failed:', err);
+                    }
+                );
+            } else {
+                // Si no se tiene el token, no se hace la llamada a la función
+                console.log('No token available. Function call not made.');
+            }
+        });
+    </script>
+</body>
